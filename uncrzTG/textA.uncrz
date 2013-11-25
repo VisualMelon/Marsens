@@ -1,0 +1,28 @@
+anim mapIdle
+model map
+
+flow 0
+
+motion a
+noupdate
+duration 10000
+end motion
+
+end flow
+
+end anim
+
+
+anim cloudsIdle
+model clouds
+
+flow 0
+
+motion a
+noupdate
+duration 10000
+end motion
+
+end flow
+
+end anim

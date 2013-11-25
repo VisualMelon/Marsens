@@ -1,0 +1,64 @@
+The UnCrazed format (uncrz)
+
+ - Files carry the extention .uncrz, and can cointain animation and model data
+
+Model Format
+
+ - A Model is a collection of segments and sections
+ - A Model WILL have a single vertex buffer, index buffer, and trans vector
+ - A Model SHOULD NOT carry no information about run-time orientation (see UNCRZ_obj)
+
+ - A Segment WILL carry transform details
+ - When drawn, a Segment WILL pass a transformed matrix to it's subsets
+
+ - A Section WILL carry all the rendering details (shader, texture, technique)
+
+Model File Format
+
+ - mdl <name>		inidcates a new model is starting
+ - end mdl		finishes off the current model
+ - seg <name>		indicates a new segment is starting
+ - end seg		finishes off the current segment
+ - sec <name>		indicates a new section is starting
+ - end sec		finishes off the current section
+
+ - mannormals		indicates that a model will use manual normals
+ - vertex <format>	WILL be set at start of model definition - inidcates the vertex format the model uses
+ - offset <x> <y> <z>	sets the offset of the current segment
+ - rotation <x> <y> <z>	sets the rotation of the current segment
+ - v <format data>	creates a new vertex - WILL be inside a segment
+ - f <i0> <i1> <i2>	stores the given indicies - WILL be inside a section
+ - shader_dx9 <fname>	indicates the DirectX 9 shader file the section is to use
+ - shader_ogl3 <fname>	indicates the OpenGL3 shader file the section is to use
+ - colmod <r> <g> <b>	sets the colour modification for the section
+ - technique <name>	indicates the shader technique the section will use
+ - texture <fname>	sets the texture the section will use
+
+ - ioff	<name>		marks an index for future refernce by <ioffName>+offset
+
+Animation Format
+
+ - An Animation WILL contain a collection of Flows, but no runtime information (ie. progress in animation execution)
+ - A Flow WILL contain a set of Motions
+ - A Flow WILL contain a start progress to start the flow from (ie. 10 frames in from Motion 3)
+ - Motions are a collection of instructions, who are carried out a given number of times (frames)
+ - An Insutrction describes some sort of geometrical or colourful transformation to a specific Segment or Section in a Model structure
+
+Animation File Format
+
+ - anim <name>		inidcates a new anim is starting
+ - end anim		finishes off the current anim
+ - flow <name>		inidcates a new flow is starting
+ - end flow		finishes off the current flow
+ - motion <name>	inidcates a new motion is starting
+ - end motion		finishes off the current motion
+
+ - model <name>		indicates the name of the model the anim refers to
+ - start <motion> <frame>	sets the start motion/frame of a flow
+ - duration <frames>	sets the duration of the current motion
+ - a <type> <seg/sec name> <data>	creates a new Instruction
+
+Notes:
+
+ - A model WILL be defined and loaded before an animation - the animation will crawl the model in order to improve performance
+ - Flows are, as such, run in paralled in an animation
