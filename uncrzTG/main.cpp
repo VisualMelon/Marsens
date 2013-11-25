@@ -4716,22 +4716,8 @@ public:
 	UNCRZ_model* model; // must be unique if you want unique transforms
 
 	float zSortDepth; // used for sorting
-
-	// game mechs (these should TOTALLY be done by inheritance)
-	int latex;
-	UNCRZ_obj* task; // object working at
-	UNCRZ_obj* destObj; // used purly for ignoring things when doing local avoidance, do not use for anything else
-	DWORD objectType;
-	DWORD objectState;
-	D3DXVECTOR3 dest; // destination of journey (ignore y axis)
-	D3DXVECTOR3 targ; // destination of current leg (ignore y axis)
-	bool targNeedsUpdate;
-	bool onFire;
-	separator sepor;
-	int boredCounter;
+	
 	bool noDraw;
-
-	float construction; // when this hits 1 it becomes active
 
 	// when it has a new dest, it calls 'walk', and then it gets a new targ - when it gets there, it calls 'walk' again, and so and so forth until it hits dest
 
@@ -4746,30 +4732,6 @@ public:
 		model = modelN;
 		offset = D3DXVECTOR3(0.0, 0.0, 0.0);
 		rotation = D3DXVECTOR3(0.0, 0.0, 0.0);
-
-		// more stuff which should be done OO style
-		latex = 0;
-		task = NULL;
-		objectState = OS_undefined;
-		onFire = false;
-		noDraw = false;
-		construction = 1; // default to 1
-	}
-
-	// sets dest and sets targNeedsUpdate to true
-	void setDest(D3DXVECTOR3 destN)
-	{
-		destObj = NULL;
-		dest = destN;
-		targNeedsUpdate = true;
-	}
-
-	// sets dest and sets targNeedsUpdate to true
-	void setDest(UNCRZ_obj* destObjN)
-	{
-		destObj = destObjN;
-		dest = destObj->offset;
-		targNeedsUpdate = true;
 	}
 
 	void changeAnim(UNCRZ_FBF_anim* newAnim)
@@ -10055,27 +10017,6 @@ void runAnims()
 	{
 		objs[i]->run();
 	}
-}
-
-void attachDynamicDecal(LPDIRECT3DDEVICE9 dxDevice, UNCRZ_obj* o)
-{
-	dynamicDecalData* dddTemp = new dynamicDecalData();
-	dddTemp->decalEnabled = false;
-	dddTemp->lightType = DDT_ortho;
-	dddTemp->dimX = o->sepor.dimension * 2;
-	dddTemp->dimY = o->sepor.dimension * 2;
-	dddTemp->lightDepth = 10;
-	dddTemp->lightDir = D3DXVECTOR4(0, -1, 0, 0);
-	dddTemp->lightPos = D3DXVECTOR4(o->offset.x, o->offset.y + 5, o->offset.z, 0);
-	dddTemp->lightUp = D3DXVECTOR3(1, 0, 0);
-	dddTemp->lightColMod = D3DXVECTOR4(1, 1, 1, 1);
-	if (o->sepor.separatorType == ST_circle)
-		dddTemp->init(dxDevice, "circle.tga", &textures);
-	else if (o->sepor.separatorType == ST_square)
-		dddTemp->init(dxDevice, "square.tga", &textures);
-	dddTemp->attach = o;
-
-	dynamicDecals.push_back(dddTemp);
 }
 
 void initObjs(LPDIRECT3DDEVICE9 dxDevice)
