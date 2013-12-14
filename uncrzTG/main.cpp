@@ -4716,8 +4716,22 @@ public:
 	UNCRZ_model* model; // must be unique if you want unique transforms
 
 	float zSortDepth; // used for sorting
-	
+
+	// game mechs (these should TOTALLY be done by inheritance)
+	int latex;
+	UNCRZ_obj* task; // object working at
+	UNCRZ_obj* destObj; // used purly for ignoring things when doing local avoidance, do not use for anything else
+	DWORD objectType;
+	DWORD objectState;
+	D3DXVECTOR3 dest; // destination of journey (ignore y axis)
+	D3DXVECTOR3 targ; // destination of current leg (ignore y axis)
+	bool targNeedsUpdate;
+	bool onFire;
+	separator sepor;
+	int boredCounter;
 	bool noDraw;
+
+	float construction; // when this hits 1 it becomes active
 
 	// when it has a new dest, it calls 'walk', and then it gets a new targ - when it gets there, it calls 'walk' again, and so and so forth until it hits dest
 
@@ -4732,6 +4746,8 @@ public:
 		model = modelN;
 		offset = D3DXVECTOR3(0.0, 0.0, 0.0);
 		rotation = D3DXVECTOR3(0.0, 0.0, 0.0);
+
+		noDraw = false;
 	}
 
 	void changeAnim(UNCRZ_FBF_anim* newAnim)
