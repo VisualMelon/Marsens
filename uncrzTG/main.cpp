@@ -8408,6 +8408,9 @@ public:
 	std::vector<UNCRZ_obj*> zSortedObjs; // for anything that needs to be drawn back-to-front
 	std::vector<int> zsoLocalIndexes; // for anything that needs to be drawn back-to-front
 
+	D3DVIEWPORT9 viewViewPort;
+	D3DXMATRIX viewViewMat;
+	D3DXMATRIX viewProjMat;
 	D3DXMATRIX viewViewProj; // (texAligned, x and y are 0..1)
 	D3DXMATRIX viewViewProjVP; // (x and y are -1..1)
 	
@@ -10807,8 +10810,8 @@ void drawScene(LPDIRECT3DDEVICE9 dxDevice, drawData* ddat, UNCRZ_view* view, DWO
 	dxDevice->SetDepthStencilSurface(view->zSurface);
 
 	D3DVIEWPORT9 vp = createViewPort(view->texWidth, view->texHeight);
+	view->viewViewPort = vp;
 	dxDevice->SetViewport(&vp);
-
 
 	if (view->clearView)
 		dxDevice->Clear(0, NULL, D3DCLEAR_TARGET, view->clearColor, 1.0f, 0);
@@ -11278,6 +11281,8 @@ void moveCameraView(LPDIRECT3DDEVICE9 dxDevice, UNCRZ_view* view)
 	else if (view->viewMode == VM_persp)
 		moveCameraView_persp(view);
 
+	view->viewViewMat = viewMatrix;
+	view->viewProjMat = projMatrix;
 	view->viewViewProjVP = viewProj;
 	view->viewViewProj = viewProj;
 
