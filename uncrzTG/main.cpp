@@ -8121,6 +8121,7 @@ const DWORD UIT_button = 2;
 // ui item action
 const DWORD UIA_leftclick = 1;
 const DWORD UIA_rightclick = 2;
+const DWORD UIA_mousemove = 3;
 
 struct uiItem
 {
@@ -8678,6 +8679,7 @@ void term();
 void deSelect();
 void eval();
 void handleUi(uiItem*, DWORD);
+void handleUi(uiItem*, DWORD, DWORD*, int);
 void handleKeys();
 void reload(LPDIRECT3DDEVICE9);
 void moveCamera(LPDIRECT3DDEVICE9);
@@ -9051,7 +9053,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		tapedUii = getTapedUiItem(sx, sy);
 		if (tapedUii != NULL)
 		{
-			handleUi(tapedUii, UIA_leftclick);
+			DWORD hudat[2] = { sx, sy };
+			handleUi(tapedUii, UIA_leftclick, hudat, 2);
 			break;
 		}
 
@@ -9254,6 +9257,11 @@ void prepBMap(std::ifstream* file, int* width, int* height)
 }
 
 void handleUi(uiItem* uii, DWORD action)
+{
+	handleUi(uii, action, NULL, 0);
+}
+
+void handleUi(uiItem* uii, DWORD action, DWORD* data, int datalen)
 {
 	switch (action)
 	{
