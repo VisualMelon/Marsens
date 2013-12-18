@@ -8250,7 +8250,7 @@ public:
 		
 		if (itemType == UIT_text)
 		{
-			drawText(offsetX, offsetY);
+			drawText(offsetX, offsetY, vt);
 		}
 
 		for each (uiItem* uii in uiItems)
@@ -8260,13 +8260,13 @@ public:
 		}
 	}
 
-	void drawText(float offsetX, float offsetY)
+	void drawText(float offsetX, float offsetY, viewTrans* vt)
 	{
 		RECT nRect;
-		nRect.left = rect.left + offsetX;
-		nRect.right = rect.right + offsetX;
-		nRect.top = rect.top + offsetY;
-		nRect.bottom = rect.bottom + offsetY;
+		nRect.left = vt->xToTextX(rect.left + offsetX);
+		nRect.right = vt->xToTextX(rect.right + offsetX);
+		nRect.top = vt->yToTextY(rect.top + offsetY);
+		nRect.bottom = vt->yToTextY(rect.bottom + offsetY);
 
 		font->DrawTextA(NULL, text.c_str(), -1, &nRect, 0, textCol);
 	}
@@ -9421,12 +9421,12 @@ void eval()
 	D3DXVECTOR3 sideVec;
 	D3DXVec3Cross(&sideVec, &views[0]->camDir, &views[0]->camUp);
 
-	views[0]->dimY = winWidth / (float)winHeight / 2.0;
+	views[0]->dimY = (float)winWidth / (float)winHeight / 2.0;
 	views[0]->camPos = camPos;
 	views[0]->camPos -= sideVec; // stereo??
 	views[0]->dirNormalAt(D3DXVECTOR3(0, 1, 0));
 
-	views[1]->dimY = winWidth / (float)winHeight / 2.0;
+	views[1]->dimY = (float)winWidth / (float)winHeight / 2.0;
 	views[1]->camPos = camPos;
 	views[1]->camPos += sideVec; // stereo?
 	views[1]->dirNormalAt(D3DXVECTOR3(0, 1, 0));
